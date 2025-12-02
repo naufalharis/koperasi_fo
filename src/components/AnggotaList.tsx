@@ -1,5 +1,6 @@
+// src/components/AnggotaList.tsx
 import { useEffect, useState } from "react";
-import {api} from "../api/axios";
+import { api } from "../api/axios";
 
 interface Anggota {
   id: string;
@@ -34,6 +35,8 @@ export default function AnggotaList() {
 
   if (loading) return <p>Loading...</p>;
 
+  const fmt = (s?: string | null) => (s ? new Date(s).toLocaleString() : "-");
+
   return (
     <div style={{ padding: 20 }}>
       <h2>Daftar Anggota</h2>
@@ -55,8 +58,8 @@ export default function AnggotaList() {
               <tr key={a.id}>
                 <td>{a.nama}</td>
                 <td>{a.email}</td>
-                <td>{a.created_at}</td>
-                <td>{a.updated_at}</td>
+                <td>{fmt(a.created_at)}</td>
+                <td>{fmt(a.updated_at)}</td>
               </tr>
             ))}
           </tbody>
