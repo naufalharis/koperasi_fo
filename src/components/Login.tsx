@@ -62,14 +62,44 @@ export default function LoginPage() {
             <p>Kelola anggota, kas, dan pinjaman dengan mudah.</p>
           </div>
 
-          <div className="benefits">
-            <h3>Keunggulan</h3>
-            <ul>
-              <li>Pencatatan kas & transaksi</li>
-              <li>Manajemen anggota & jabatan</li>
-              <li>Laporan ringkas dan ekspor</li>
-            </ul>
-          </div>
+  <div className="benefits">
+  <h2>Keunggulan Koperasi</h2>
+  <ul>
+    <li>
+      <strong>Kepemilikan dan Pengelolaan Bersama</strong> — Koperasi berdiri 
+      atas asas kebersamaan, di mana setiap anggota memiliki hak suara yang 
+      setara dalam pengambilan keputusan. Tidak ada pihak yang mendominasi, 
+      sehingga semua kebijakan benar-benar mencerminkan kebutuhan dan aspirasi 
+      anggota. Model ini menciptakan lingkungan yang lebih demokratis dan 
+      berkeadilan.
+    </li>
+
+    <li>
+      <strong>Pembagian Keuntungan yang Adil</strong> — Sisa Hasil Usaha (SHU) 
+      dibagikan kembali kepada anggota berdasarkan kontribusi mereka, bukan 
+      berdasarkan modal terbesar. Ini membuat koperasi menjadi lembaga yang 
+      fokus pada kesejahteraan anggota, bukan mencari keuntungan sepihak, dan 
+      meningkatkan rasa memiliki di antara seluruh anggota.
+    </li>
+
+    <li>
+      <strong>Akses Ekonomi yang Lebih Mudah</strong> — Melalui layanan simpan 
+      pinjam, pembiayaan usaha kecil, hingga penyediaan kebutuhan pokok, 
+      koperasi memberi peluang ekonomi yang lebih terjangkau bagi anggotanya. 
+      Hal ini membantu meningkatkan kemandirian finansial serta memperluas 
+      kesempatan bagi anggota untuk berkembang.
+    </li>
+
+    <li>
+      <strong>Transparansi dan Akuntabilitas Tinggi</strong> — Seluruh kegiatan 
+      operasional, mulai dari transaksi, pembukuan, hingga laporan keuangan, 
+      dilakukan secara terbuka dan dapat dipantau oleh seluruh anggota. Prinsip 
+      ini menciptakan kepercayaan kuat, mencegah penyalahgunaan kewenangan, dan 
+      memastikan koperasi berjalan dengan jujur serta profesional.
+    </li>
+  </ul>
+</div>
+
         </aside>
 
         <main className="login-card" aria-live="polite">
