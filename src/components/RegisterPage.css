@@ -1,0 +1,80 @@
+/*
+RegisterPage.css
+Save this file as `RegisterPage.css` next to the TSX file.
+*/
+
+:root{
+  --bg:#f3f6fb;
+  --card:#ffffff;
+  --muted:#6b7280;
+  --accent:#0b73ff;
+  --radius:14px;
+  --shadow: 0 8px 30px rgba(17,24,39,0.08);
+}
+
+/* Reset small */
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
+
+.rp-root{
+  min-height:100vh;
+  background: linear-gradient(180deg, var(--bg), #eef4ff 60%);
+  display:flex;align-items:center;justify-content:center;padding:28px;
+}
+
+.rp-card{
+  width:100%;
+  max-width:1080px;
+  display:grid;
+  grid-template-columns: 360px 1fr;
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+/* Aside (left) */
+.rp-aside{
+  padding:36px 28px;
+  background: linear-gradient(180deg, rgba(11,115,255,0.06), transparent);
+  display:flex;flex-direction:column;gap:18px;
+}
+.rp-brand{display:flex;gap:12px;align-items:center;color:var(--accent)}
+.rp-brand h1{font-size:18px;margin:0}
+.rp-desc{color:var(--muted);font-size:14px;line-height:1.45}
+.rp-illustration{flex:1;display:flex;align-items:center;justify-content:center;opacity:0.95}
+.rp-illustration svg{width:100%;height:120px;max-width:220px;fill:rgba(11,115,255,0.08)}
+.rp-footer-note{font-size:13px;color:var(--muted)}
+.rp-link{background:none;border:0;padding:0;color:var(--accent);cursor:pointer;font-weight:600}
+
+/* Main content */
+.rp-main{padding:34px 40px}
+.rp-title{margin:0 0 12px 0;font-size:20px}
+.rp-error{background:#ffe6e6;color:#8b1d1d;padding:10px;border-radius:8px;margin-bottom:12px}
+
+.rp-form{display:block}
+.rp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rp-field{display:flex;flex-direction:column}
+.rp-field label{font-size:13px;color:var(--muted);margin-bottom:6px}
+.input{padding:10px 12px;border:1px solid #e6e9ef;border-radius:8px;font-size:14px;outline:none;transition:box-shadow .15s, border-color .15s}
+.input:focus{border-color:var(--accent);box-shadow:0 6px 20px rgba(11,115,255,0.08)}
+.rp-full{grid-column:1 / -1}
+
+.rp-actions{margin-top:18px}
+.btn{display:inline-block;width:100%;padding:12px 16px;border-radius:10px;border:0;background:var(--accent);color:#fff;font-weight:600;cursor:pointer;transition:transform .12s, box-shadow .12s}
+.btn:disabled{opacity:0.7;cursor:not-allowed}
+.btn:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(11,115,255,0.12)}
+
+/* Responsive */
+@media (max-width:880px){
+  .rp-card{grid-template-columns:1fr}
+  .rp-aside{order:2;padding:20px}
+  .rp-main{order:1;padding:20px}
+  .rp-grid{grid-template-columns:1fr}
+  .rp-illustration{display:none}
+}
+
+@media (max-width:420px){
+  .rp-root{padding:14px}
+  .rp-card{border-radius:12px}
+}

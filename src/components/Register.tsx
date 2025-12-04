@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+// RegisterPage.tsx
+import React, { useEffect, useState } from "react";
 import { api } from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import "./RegisterPage.css";
 
 interface Jabatan {
   id: string;
@@ -21,7 +23,6 @@ export default function RegisterPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // ambil daftar jabatan dari backend
     const fetchJabatan = async () => {
       try {
         const res = await api.get<Jabatan[]>("/jabatan");
@@ -32,6 +33,7 @@ export default function RegisterPage() {
       }
     };
     fetchJabatan();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -45,7 +47,6 @@ export default function RegisterPage() {
 
     setLoading(true);
     try {
-      // 1) register
       await api.post("/auth/register", {
         nama,
         email,
@@ -55,19 +56,13 @@ export default function RegisterPage() {
         id_jabatan: jabatanId,
       });
 
-      // 2) auto-login setelah register sukses
       const loginRes = await api.post("/auth/login", { email, password });
       const token = loginRes.data.access_token || loginRes.data.token || loginRes.data.accessToken;
       if (!token) throw new Error("Token tidak ditemukan pada response login");
 
-      // simpan token
       localStorage.setItem("token", token);
 
-      // optional: set global Authorization header (axios interceptor already handles localStorage)
-      // api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-      // redirect ke anggota
-      navigate("/anggota");
+      navigate("/login");
     } catch (err: any) {
       console.error("Register error:", err?.response?.data || err);
       const message = err?.response?.data?.message || (err?.message ?? "Gagal register");
@@ -78,53 +73,80 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-lg">
-        <h2 className="text-2xl font-bold mb-6 text-center">Register Anggota</h2>
-
-        {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>}
-
-        <form onSubmit={handleRegister} className="space-y-4">
-          <div>
-            <label className="block mb-1 font-medium">Nama</label>
-            <input value={nama} onChange={(e) => setNama(e.target.value)} required className="w-full p-3 border rounded" />
+    <div className="rp-root">
+      <div className="rp-card">
+        <div className="rp-aside">
+          <div className="rp-brand">
+            <svg width="42" height="42" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" strokeWidth="1.2"/>
+              <path d="M7 12h10M7 7h10M7 17h10" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+            </svg>
+            <h1>Kooperasi</h1>
           </div>
 
-          <div>
-            <label className="block mb-1 font-medium">Email</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full p-3 border rounded" />
+          <p className="rp-desc">Daftar sebagai anggota — akses koleksi, peminjaman, dan riwayat.</p>
+
+          <div className="rp-illustration" aria-hidden>
+            <svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">
+              <rect x="0" y="20" width="80" height="110" rx="6" />
+              <rect x="90" y="30" width="120" height="90" rx="6" />
+            </svg>
           </div>
 
-          <div>
-            <label className="block mb-1 font-medium">Password</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} className="w-full p-3 border rounded" />
-          </div>
+          <div className="rp-footer-note">Sudah punya akun? <button className="rp-link" onClick={() => navigate('/login')}>Masuk</button></div>
+        </div>
 
-          <div>
-            <label className="block mb-1 font-medium">Alamat</label>
-            <input value={alamat} onChange={(e) => setAlamat(e.target.value)} className="w-full p-3 border rounded" />
-          </div>
+        <div className="rp-main">
+          <h2 className="rp-title">Buat Akun Anggota</h2>
 
-          <div>
-            <label className="block mb-1 font-medium">No. HP</label>
-            <input value={noHp} onChange={(e) => setNoHp(e.target.value)} className="w-full p-3 border rounded" />
-          </div>
+          {error && <div className="rp-error">{error}</div>}
 
-          <div>
-            <label className="block mb-1 font-medium">Jabatan</label>
-            <select value={jabatanId} onChange={(e) => setJabatanId(e.target.value)} className="w-full p-3 border rounded">
-              {jabatanList.map((j) => (
-                <option key={j.id} value={j.id}>
-                  {j.nama}
-                </option>
-              ))}
-            </select>
-          </div>
+          <form onSubmit={handleRegister} className="rp-form" noValidate>
+            <div className="rp-grid">
+              <div className="rp-field">
+                <label>Nama</label>
+                <input className="input" value={nama} onChange={(e) => setNama(e.target.value)} required />
+              </div>
 
-          <button type="submit" disabled={loading} className="w-full bg-blue-600 text-white p-3 rounded">
-            {loading ? "Memproses..." : "Daftar & Masuk"}
-          </button>
-        </form>
+              <div className="rp-field">
+                <label>Email</label>
+                <input className="input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              </div>
+
+              <div className="rp-field">
+                <label>Password</label>
+                <input className="input" type="password" minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} required />
+              </div>
+
+              <div className="rp-field">
+                <label>No. HP</label>
+                <input className="input" value={noHp} onChange={(e) => setNoHp(e.target.value)} />
+              </div>
+
+              <div className="rp-field rp-full">
+                <label>Alamat</label>
+                <input className="input" value={alamat} onChange={(e) => setAlamat(e.target.value)} />
+              </div>
+
+              <div className="rp-field">
+                <label>Jabatan</label>
+                <select className="input" value={jabatanId} onChange={(e) => setJabatanId(e.target.value)}>
+                  {jabatanList.map((j) => (
+                    <option key={j.id} value={j.id}>{j.nama}</option>
+                  ))}
+                </select>
+              </div>
+
+            </div>
+
+            <div className="rp-actions">
+              <button type="submit" className="btn" disabled={loading} aria-busy={loading}>
+                {loading ? 'Memproses...' : 'Daftar & Masuk'}
+              </button>
+            </div>
+
+          </form>
+        </div>
       </div>
     </div>
   );
