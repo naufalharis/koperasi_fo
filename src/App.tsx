@@ -7,13 +7,16 @@ import AnggotaList from "./components/AnggotaList";
 import AnggotaEdit from "./components/AnggotaEdit";
 import PinjamanList from "./components/PinjamanList";
 
+import KasList from "./components/KasList";
+import KasForm from "./components/KasForm";
+
 import AngsuranList from "./components/AngsuranList";
 import AngsuranForm from "./components/AngsuranForm";
 
 // Wrapper component untuk AngsuranForm
 function AngsuranFormWrapper() {
   const navigate = useNavigate();
-  
+
   const handleSuccess = () => {
     navigate("/angsuran");
   };
@@ -33,7 +36,15 @@ function App() {
 
         {/* Master */}
         <Route path="/anggota" element={<AnggotaList />} />
+        <Route path="/anggota/:id/edit" element={<AnggotaEdit />} />
         <Route path="/pinjaman" element={<PinjamanList />} />
+
+        {/* Kas */}
+        <Route path="/kas" element={<KasList />} />
+        <Route path="/kas/create" element={<KasForm />} />
+        <Route path="/kas/:id/edit" element={<KasForm />} />
+
+
 
         {/* Angsuran */}
         <Route path="/angsuran" element={<AngsuranList />} />
