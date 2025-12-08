@@ -8,6 +8,7 @@ import PinjamanList from "./components/PinjamanList";
 
 import AngsuranList from "./components/AngsuranList";
 import AngsuranForm from "./components/AngsuranForm";
+import AnggotaEdit from "./components/AnggotaEdit";
 
 // Wrapper component untuk AngsuranForm
 function AngsuranFormWrapper() {
@@ -32,6 +33,7 @@ function App() {
 
         {/* Master */}
         <Route path="/anggota" element={<AnggotaList />} />
+        <Route path="/anggota/:id/edit" element={<AnggotaEdit />} />
         <Route path="/pinjaman" element={<PinjamanList />} />
 
         {/* Angsuran */}
