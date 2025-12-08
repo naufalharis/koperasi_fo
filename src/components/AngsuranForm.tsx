@@ -10,7 +10,7 @@ interface Props {
 const AngsuranForm: React.FC<Props> = ({ editing, onSuccess }) => {
   const [pinjamanList, setPinjamanList] = useState<any[]>([]);
 
-  // ← gunakan string dulu
+  // STRING (UUID), jangan diubah ke number
   const [pinjaman_id, setPinjamanId] = useState<string>(
     editing?.pinjaman_id ? String(editing.pinjaman_id) : ""
   );
@@ -35,21 +35,26 @@ const AngsuranForm: React.FC<Props> = ({ editing, onSuccess }) => {
       return;
     }
 
+    // FIX: Jangan ubah UUID ke Number → biarkan string
     const payload = {
-      pinjaman_id: Number(pinjaman_id), // ← convert aman
+      pinjaman_id: pinjaman_id,
       tanggal_pembayaran: new Date(tanggal_pembayaran).toISOString(),
       jumlah_pembayaran: Number(jumlah_pembayaran),
     };
 
     console.log("PAYLOAD DIKIRIM:", payload);
 
-    if (editing) {
-      await angsuranService.update(editing.id, payload);
-    } else {
-      await angsuranService.create(payload);
-    }
+    try {
+      if (editing) {
+        await angsuranService.update(editing.id, payload);
+      } else {
+        await angsuranService.create(payload);
+      }
 
-    onSuccess();
+      onSuccess();
+    } catch (err) {
+      console.error("Gagal submit:", err);
+    }
   };
 
   return (
@@ -62,7 +67,7 @@ const AngsuranForm: React.FC<Props> = ({ editing, onSuccess }) => {
       >
         <option value="">-- pilih pinjaman --</option>
         {pinjamanList.map((p) => (
-          <option key={p.id} value={String(p.id)}>
+         <option key={p.id} value={String(p.id)}>
             {p.id} - Rp {p.jumlah.toLocaleString()}
           </option>
         ))}

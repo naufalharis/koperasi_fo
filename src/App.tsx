@@ -4,7 +4,6 @@ import LoginPage from "./components/Login";
 import RegisterPage from "./components/Register";
 
 import AnggotaList from "./components/AnggotaList";
-import AnggotaEdit from "./components/AnggotaEdit";
 import PinjamanList from "./components/PinjamanList";
 
 import AngsuranList from "./components/AngsuranList";
