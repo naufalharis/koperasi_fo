@@ -1,8 +1,5 @@
-/*
-RegisterPage.css
-Save this file as `RegisterPage.css` next to the TSX file.
-*/
-
+/* src/components/RegisterPage.css */
+/* Root vars */
 :root{
   --bg:#f3f6fb;
   --card:#ffffff;
@@ -10,18 +7,19 @@ Save this file as `RegisterPage.css` next to the TSX file.
   --accent:#0b73ff;
   --radius:14px;
   --shadow: 0 8px 30px rgba(17,24,39,0.08);
+  --danger: #b91c1c;
 }
 
-/* Reset small */
+/* Basic reset */
 *{box-sizing:border-box}
-body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
-
+body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;color:#0f172a}
 .rp-root{
   min-height:100vh;
   background: linear-gradient(180deg, var(--bg), #eef4ff 60%);
   display:flex;align-items:center;justify-content:center;padding:28px;
 }
 
+/* Card layout */
 .rp-card{
   width:100%;
   max-width:1080px;
@@ -33,7 +31,7 @@ body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe
   overflow:hidden;
 }
 
-/* Aside (left) */
+/* Aside */
 .rp-aside{
   padding:36px 28px;
   background: linear-gradient(180deg, rgba(11,115,255,0.06), transparent);
@@ -47,11 +45,12 @@ body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe
 .rp-footer-note{font-size:13px;color:var(--muted)}
 .rp-link{background:none;border:0;padding:0;color:var(--accent);cursor:pointer;font-weight:600}
 
-/* Main content */
+/* Main */
 .rp-main{padding:34px 40px}
 .rp-title{margin:0 0 12px 0;font-size:20px}
-.rp-error{background:#ffe6e6;color:#8b1d1d;padding:10px;border-radius:8px;margin-bottom:12px}
+.rp-error{background:#ffe6e6;color:var(--danger);padding:10px;border-radius:8px;margin-bottom:12px;font-size:14px}
 
+/* Form */
 .rp-form{display:block}
 .rp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .rp-field{display:flex;flex-direction:column}
@@ -60,12 +59,37 @@ body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe
 .input:focus{border-color:var(--accent);box-shadow:0 6px 20px rgba(11,115,255,0.08)}
 .rp-full{grid-column:1 / -1}
 
+/* field error */
+.rp-field-error{color:var(--danger);font-size:13px;margin-top:6px}
+
+/* password row */
+.password-wrap{position:relative;display:flex}
+.btn-inline{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:none;background:transparent;color:#475569;cursor:pointer;padding:6px 8px;border-radius:6px;font-size:13px}
+.btn-inline:hover{background:rgba(15,23,42,0.03)}
+
+/* password strength */
+.pw-strength{display:flex;align-items:center;gap:12px;margin-top:8px}
+.pw-bars{display:flex;gap:6px}
+.pw-bars .bar{width:34px;height:6px;background:#eef2ff;border-radius:4px;transition:background .15s}
+.pw-bars .bar.on{background:linear-gradient(90deg,#f97316,#60a5fa)}
+.pw-label{font-size:13px;color:var(--muted)}
+
+/* skeleton select */
+.skeleton-select{height:44px;border-radius:8px;background:linear-gradient(90deg,#f1f5f9,#eef2ff);display:flex;align-items:center;padding:10px 12px;color:#94a3b8}
+
+/* actions */
 .rp-actions{margin-top:18px}
 .btn{display:inline-block;width:100%;padding:12px 16px;border-radius:10px;border:0;background:var(--accent);color:#fff;font-weight:600;cursor:pointer;transition:transform .12s, box-shadow .12s}
 .btn:disabled{opacity:0.7;cursor:not-allowed}
 .btn:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(11,115,255,0.12)}
 
-/* Responsive */
+/* divider and socials (if used) */
+.divider{display:flex;align-items:center;gap:10px;margin-top:10px}
+.divider::before,.divider::after{content:'';height:1px;background:#e6eef8;flex:1}
+.signup{margin-top:12px;text-align:center;color:var(--muted)}
+.link-primary{color:var(--accent);text-decoration:none;font-weight:600}
+
+/* responsive */
 @media (max-width:880px){
   .rp-card{grid-template-columns:1fr}
   .rp-aside{order:2;padding:20px}
@@ -78,3 +102,46 @@ body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe
   .rp-root{padding:14px}
   .rp-card{border-radius:12px}
 }
+
+/* container gap sudah diset inline di JSX, tapi bisa juga di css:
+.edit-actions { display:flex; gap:12px; } 
+*/
+
+.btn-muted {
+  background: transparent;
+  color: #374151;               /* slate-700, netral */
+  border: 1px solid #e6eef8;
+  box-shadow: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+}
+.btn-muted:hover {
+  background: rgba(15,23,42,0.03);
+  transform: translateY(-2px);
+}
+
+/* primary (save) yang mencolok */
+.btn-primary {
+  background: linear-gradient(90deg, #06b6d4, #3b82f6); /* teal -> blue */
+  color: #ffffff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(59,130,246,0.16);
+  color: blue;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  filter: brightness(0.98);
+}
+
+/* disabled look */
+.btn-primary:disabled,
+.btn-muted:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
