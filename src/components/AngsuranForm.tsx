@@ -9,11 +9,17 @@ interface Props {
 
 const AngsuranForm: React.FC<Props> = ({ editing, onSuccess }) => {
   const [pinjamanList, setPinjamanList] = useState<any[]>([]);
-  const [pinjaman_id, setPinjamanId] = useState(editing?.pinjaman_id || "");
-  const [tanggal_pembayaran, setTanggal] = useState(
+
+  // ← gunakan string dulu
+  const [pinjaman_id, setPinjamanId] = useState<string>(
+    editing?.pinjaman_id ? String(editing.pinjaman_id) : ""
+  );
+
+  const [tanggal_pembayaran, setTanggal] = useState<string>(
     editing?.tanggal_pembayaran?.substring(0, 10) || ""
   );
-  const [jumlah_pembayaran, setJumlah] = useState(
+
+  const [jumlah_pembayaran, setJumlah] = useState<number>(
     editing?.jumlah_pembayaran || 0
   );
 
@@ -24,11 +30,18 @@ const AngsuranForm: React.FC<Props> = ({ editing, onSuccess }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!pinjaman_id) {
+      alert("Harap pilih pinjaman!");
+      return;
+    }
+
     const payload = {
-      pinjaman_id,
+      pinjaman_id: Number(pinjaman_id), // ← convert aman
       tanggal_pembayaran: new Date(tanggal_pembayaran).toISOString(),
       jumlah_pembayaran: Number(jumlah_pembayaran),
     };
+
+    console.log("PAYLOAD DIKIRIM:", payload);
 
     if (editing) {
       await angsuranService.update(editing.id, payload);
@@ -49,7 +62,7 @@ const AngsuranForm: React.FC<Props> = ({ editing, onSuccess }) => {
       >
         <option value="">-- pilih pinjaman --</option>
         {pinjamanList.map((p) => (
-          <option key={p.id} value={p.id}>
+          <option key={p.id} value={String(p.id)}>
             {p.id} - Rp {p.jumlah.toLocaleString()}
           </option>
         ))}
@@ -67,7 +80,7 @@ const AngsuranForm: React.FC<Props> = ({ editing, onSuccess }) => {
       <input
         type="number"
         value={jumlah_pembayaran}
-        onChange={(e) => setJumlah(e.target.value)}
+        onChange={(e) => setJumlah(Number(e.target.value))}
         required
       />
 

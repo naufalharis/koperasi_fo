@@ -36,7 +36,7 @@ function App() {
 
         {/* Angsuran */}
         <Route path="/angsuran" element={<AngsuranList />} />
-        <Route path="/angsuran/form" element={<AngsuranFormWrapper />} />
+        <Route path="/angsuran/tambah" element={<AngsuranFormWrapper />} />
         <Route path="/angsuran/form/:id" element={<AngsuranFormWrapper />} />
 
       </Routes>
