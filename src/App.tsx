@@ -10,6 +10,8 @@ import AngsuranList from "./components/AngsuranList";
 import AngsuranForm from "./components/AngsuranForm";
 import AnggotaEdit from "./components/AnggotaEdit";
 
+import Layout from "./components/Layout/Layout";
+
 // Wrapper component untuk AngsuranForm
 function AngsuranFormWrapper() {
   const navigate = useNavigate();
@@ -24,24 +26,26 @@ function AngsuranFormWrapper() {
 function App() {
   return (
     <Router>
-      <Routes>
+      <Layout>
+        <Routes>
 
-        {/* Auth */}
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+          {/* Auth */}
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
 
-        {/* Master */}
-        <Route path="/anggota" element={<AnggotaList />} />
-        <Route path="/anggota/:id/edit" element={<AnggotaEdit />} />
-        <Route path="/pinjaman" element={<PinjamanList />} />
+          {/* Master */}
+          <Route path="/anggota" element={<AnggotaList />} />
+          <Route path="/anggota/:id/edit" element={<AnggotaEdit />} />
+          <Route path="/pinjaman" element={<PinjamanList />} />
 
-        {/* Angsuran */}
-        <Route path="/angsuran" element={<AngsuranList />} />
-        <Route path="/angsuran/tambah" element={<AngsuranFormWrapper />} />
-        <Route path="/angsuran/form/:id" element={<AngsuranFormWrapper />} />
+          {/* Angsuran */}
+          <Route path="/angsuran" element={<AngsuranList />} />
+          <Route path="/angsuran/tambah" element={<AngsuranFormWrapper />} />
+          <Route path="/angsuran/form/:id" element={<AngsuranFormWrapper />} />
 
-      </Routes>
+        </Routes>
+      </Layout>
     </Router>
   );
 }
