@@ -2,75 +2,145 @@ import { useEffect, useState } from "react";
 import { pinjamanService } from "../services/pinjamanService";
 import PinjamanForm from "./PinjamanForm";
 import PinjamanAngsuranForm from "./PinjamanAngsuranForm";
+import "./PinjamanList.css";
 
 export default function PinjamanList() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [openForm, setOpenForm] = useState(false);
-  const [editData, setEditData] = useState(null);
-  const [openAngsuran, setOpenAngsuran] = useState(null);
+  const [showTrash, setShowTrash] = useState(false);
 
   const loadData = async () => {
     setLoading(true);
-    const res = await pinjamanService.list();
-    setData(res);
-    setLoading(false);
+    try {
+      const res = showTrash
+        ? await pinjamanService.trash()
+        : await pinjamanService.list();
+      setData(res);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     loadData();
-  }, []);
-
-  const fmt = (s: string | null | undefined) => 
-  s ? new Date(s).toLocaleString() : "-";
-
-  if (loading) return <p>Loading...</p>;
+  }, [showTrash]);
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Daftar Pinjaman</h2>
-      <button onClick={() => setOpenForm(true)}>+ Tambah Pinjaman</button>
+    <div className="pl-root">
+      <div className="pl-card">
 
-      <table border={1} cellPadding={10} style={{ marginTop: 20 }}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Anggota</th>
-            <th>Jumlah</th>
-            <th>Status</th>
-            <th>Tanggal</th>
-            <th>Jatuh Tempo</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((p: any) => (
-            <tr key={p.id}>
-              <td>{p.id}</td>
-              <td>{p.anggota?.nama ?? "-"}</td>
-              <td>{p.jumlah.toLocaleString()}</td>
-              <td>{p.status}</td>
-              <td>{fmt(p.tanggal)}</td>
-              <td>{fmt(p.tanggal_jatuh_tempo)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        {/* HEADER */}
+        <div className="pl-header">
+          <h3>{showTrash ? "Data Terhapus (Trash)" : "Daftar Pinjaman"}</h3>
 
-      {openForm && (
-        <PinjamanForm
-          onClose={() => { setOpenForm(false); setEditData(null); }}
-          onSuccess={loadData}
-          edit={editData}
-        />
-      )}
+          <div className="pl-controls">
+            {!showTrash && (
+              <button className="pl-add-btn" onClick={() => setOpenForm(true)}>
+                + Tambah
+              </button>
+            )}
 
-      {openAngsuran && (
-        <PinjamanAngsuranForm
-          angsuran={openAngsuran}
-          onClose={() => setOpenAngsuran(null)}
-          onSuccess={loadData}
-        />
-      )}
+            {/* TOMBOL TRASH */}
+            <button
+              className={showTrash ? "pl-edit-btn" : "pl-soft-delete-btn"}
+              onClick={() => setShowTrash(!showTrash)}
+            >
+              {showTrash ? "Kembali" : "Sampah"}
+            </button>
+          </div>
+        </div>
+
+        {/* TABEL HEADER */}
+        <div className="pl-table">
+          <div className="pl-table-head">
+            <div>Anggota</div>
+            <div>Jumlah</div>
+            <div>Tanggal</div>
+            <div>Jatuh Tempo</div>
+            <div>Status</div>
+            <div>Aksi</div>
+          </div>
+
+          {/* LIST DATA */}
+          <div className="pl-table-body">
+            {loading ? (
+              <div className="pl-loading">
+                <div className="pl-row-skel">
+                  <div className="skel skel-1" />
+                  <div className="skel skel-2" />
+                  <div className="skel skel-3" />
+                  <div className="skel skel-4" />
+                </div>
+              </div>
+            ) : data.length === 0 ? (
+              <div className="pl-empty">Tidak ada data</div>
+            ) : (
+              data.map((item) => (
+                <div key={item.id} className="pl-row">
+                  <div className="col">{item.anggota?.nama}</div>
+                  <div className="col">{item.jumlah}</div>
+                  <div className="col">{item.tanggal?.slice(0, 10)}</div>
+                  <div className="col">{item.tanggal_jatuh_tempo?.slice(0, 10)}</div>
+
+                  <div className="col">
+                    {!item.deleted_at ? (
+                      item.status === "LUNAS" ? (
+                        <span className="badge badge-lunas">Lunas</span>
+                      ) : (
+                        <span className="badge badge-belum">Belum</span>
+                      )
+                    ) : (
+                      <span className="badge badge-soft-delete">Terhapus</span>
+                    )}
+                  </div>
+
+                  <div className="pl-row-actions">
+                    {!showTrash ? (
+                      <>
+                        <button className="pl-edit-btn">Edit</button>
+                        <button
+                          className="pl-soft-delete-btn"
+                          onClick={async () => {
+                            await pinjamanService.softDelete(item.id);
+                            loadData();
+                          }}
+                        >
+                          Hapus
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          className="pl-edit-btn"
+                          onClick={async () => {
+                            await pinjamanService.restore(item.id);
+                            loadData();
+                          }}
+                        >
+                          Restore
+                        </button>
+
+                        <button
+                          className="pl-delete-btn"
+                          onClick={async () => {
+                            await pinjamanService.hardDelete(item.id);
+                            loadData();
+                          }}
+                        >
+                          Delete Permanen
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+
+      {openForm && <PinjamanForm onClose={() => setOpenForm(false)} />}
     </div>
   );
 }
