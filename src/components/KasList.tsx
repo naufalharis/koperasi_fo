@@ -82,7 +82,18 @@ export default function KasList() {
 
   const fmtCurrency = (n?: number) =>
     typeof n === "number" ? n.toLocaleString("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }) : "-";
-  const fmtDate = (s?: string | null) => (s ? new Date(s).toLocaleString() : "-");
+  const fmtDate = (s?: string | null) => {
+  if (!s) return "-";
+  try {
+    const d = new Date(s);
+    const dd = String(d.getDate()).padStart(2, "0");
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const yyyy = d.getFullYear();
+    return `${dd}/${mm}/${yyyy}`; // format DD/MM/YYYY
+  } catch {
+    return s;
+  }
+};
 
   const handleDelete = async (id: string) => {
     const ok = window.confirm("Hapus kas ini? (action akan menghapus record)");

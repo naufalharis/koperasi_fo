@@ -16,7 +16,7 @@ export default function KasForm() {
   const navigate = useNavigate();
 
   const [nominal, setNominal] = useState<number | "">("");
-  const [tanggal, setTanggal] = useState<string>("");
+  const [tanggal, setTanggal] = useState<string>(""); // yyyy-mm-dd
   const [note, setNote] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -24,17 +24,32 @@ export default function KasForm() {
 
   useEffect(() => {
     let mounted = true;
+
+    // helper: today in yyyy-mm-dd
+    const todayYMD = () => {
+      const d = new Date();
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const dd = String(d.getDate()).padStart(2, "0");
+      return `${yyyy}-${mm}-${dd}`;
+    };
+
     async function load() {
-      if (!isEdit) return;
+      if (!isEdit) {
+        // create: set tanggal to today and disable editing
+        setTanggal(todayYMD());
+        return;
+      }
+
       setLoading(true);
       try {
         const res = await api.get(`/kas/${id}`);
         if (!mounted) return;
         const d = res.data;
-        // support both res.data.data or res.data
         const item = d?.data ?? d;
         setNominal(item.nominal ?? "");
-        setTanggal(item.tanggal ? new Date(item.tanggal).toISOString().slice(0, 10) : "");
+        // convert to yyyy-mm-dd for input[type=date]
+        setTanggal(item.tanggal ? new Date(item.tanggal).toISOString().slice(0, 10) : todayYMD());
         setNote(item.note ?? "");
       } catch (err: any) {
         console.error("Error loading kas:", err);
@@ -65,6 +80,7 @@ export default function KasForm() {
     try {
       const payload: KasPayload = {
         nominal: Number(nominal),
+        // keep tanggal as yyyy-mm-dd but send as ISO timestamp to backend
         tanggal: new Date(tanggal).toISOString(),
         note: note || null,
       };
@@ -83,6 +99,20 @@ export default function KasForm() {
   };
 
   if (loading) return <div style={{ padding: 16 }}>Memuat...</div>;
+
+  // helper to format yyyy-mm-dd -> dd/mm/yyyy for display
+  const fmtDisplay = (ymd?: string) => {
+    if (!ymd) return "-";
+    try {
+      const d = new Date(ymd);
+      const dd = String(d.getDate()).padStart(2, "0");
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const yyyy = d.getFullYear();
+      return `${dd}/${mm}/${yyyy}`;
+    } catch {
+      return ymd;
+    }
+  };
 
   return (
     <div className="kas-root">
@@ -111,9 +141,19 @@ export default function KasForm() {
             />
           </label>
 
+          {/* tanggal tidak bisa diubah oleh user — tetap tampil sebagai disabled */}
           <label>
-            <div className="label">Tanggal</div>
-            <input type="date" value={tanggal} onChange={(e) => setTanggal(e.target.value)} className="input" />
+            <div className="label">Tanggal (otomatis — tidak dapat diubah)</div>
+            <input
+              type="date"
+              value={tanggal}
+              onChange={(e) => setTanggal(e.target.value)} // kept for completeness but input is disabled
+              className="input"
+              disabled
+            />
+            <div style={{ marginTop: 6, fontSize: 13, color: "#6b7280" }}>
+              Tanggal: <strong>{fmtDisplay(tanggal)}</strong>
+            </div>
           </label>
 
           <label>
@@ -128,9 +168,9 @@ export default function KasForm() {
             <button type="button" className="btn btn-muted" onClick={() => navigate("/kas")} style={{ marginLeft: 12 }}>
               Kembali
             </button>
-          </div>
+          </div> 
         </form>
       </div>
     </div>
-  );
+  )
 }
