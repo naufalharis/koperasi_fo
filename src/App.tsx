@@ -10,6 +10,8 @@ import AngsuranList from "./components/AngsuranList";
 import AngsuranForm from "./components/AngsuranForm";
 import AnggotaEdit from "./components/AnggotaEdit";
 
+import SimpananList from "./components/SimpananList";
+
 import Layout from "./components/Layout/Layout";
 
 // Wrapper component untuk AngsuranForm
@@ -44,6 +46,8 @@ function App() {
           <Route path="/angsuran/tambah" element={<AngsuranFormWrapper />} />
           <Route path="/angsuran/form/:id" element={<AngsuranFormWrapper />} />
 
+          {/* Simpanan */}
+          <Route path="/simpanan" element={<SimpananList />} />
         </Routes>
       </Layout>
     </Router>
