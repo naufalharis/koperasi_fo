@@ -1,0 +1,44 @@
+/* Kas.css - simple, consistent with other components */
+.kas-root { padding: 18px; font-family: Inter, system-ui, Arial, sans-serif; color:#0f172a; }
+.kas-card { max-width: 1100px; margin: 0 auto; background: #fff; border-radius: 12px; padding: 14px; box-shadow: 0 8px 30px rgba(2,6,23,0.06); border: 1px solid rgba(2,6,23,0.04); }
+
+/* header */
+.kas-header { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; margin-bottom:12px; }
+.kas-header h3 { margin:0; font-size:18px; }
+
+/* filters & actions */
+.kas-actions { display:flex; gap:12px; align-items:center; }
+.kas-filters { display:flex; gap:8px; align-items:center; }
+.kas-filters input[type="date"] { padding:8px; border-radius:8px; border:1px solid #e6eef8; }
+.kas-filters input[type="text"], .kas-filters input[type="search"] { padding:8px 12px; border-radius:8px; border:1px solid #e6eef8; min-width:200px; }
+
+/* buttons */
+.btn { padding:8px 12px; border-radius:8px; border:1px solid #e6eef8; background:#fff; cursor:pointer; color: black;}
+.btn-primary { background: linear-gradient(90deg,#06b6d4,#3b82f6); color:#fff; border:none; box-shadow: 0 8px 20px rgba(59,130,246,0.12); }
+.btn-muted { background:transparent; color:#374151; border:1px solid #e6eef8; }
+.btn.danger { background:#fff7f8; color:#9f1239; border-color: rgba(159,18,57,0.08); }
+
+/* table */
+.kas-table { border-top:1px solid #eef2ff; border-bottom:1px solid #eef2ff; }
+.kas-head { display:grid; grid-template-columns: 1fr 1.2fr 2fr 1fr 1fr 1fr; padding:10px 12px; font-weight:600; color:#475569; font-size:13px; gap:12px; align-items:center; }
+.kas-body { display:flex; flex-direction:column; gap:6px; padding:8px 0; }
+.kas-row { display:grid; grid-template-columns: 1fr 1.2fr 2fr 1fr 1fr 1fr; gap:12px; align-items:center; padding:10px 12px; border-radius:8px; transition: background .12s, transform .08s; }
+.kas-row:hover { background:#fbfdff; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(2,6,23,0.03); }
+.kas-row.muted { opacity:0.6; background:#fffaf6; }
+
+/* columns */
+.col { font-size:14px; color:#0f172a; }
+.col.note { color:#475569; }
+
+/* empty & errors */
+.kas-empty, .kas-loading { padding:18px; text-align:center; color:#64748b; }
+.kas-error { color:#b91c1c; padding:12px; border-radius:8px; background:#fff1f2; }
+
+/* footer */
+.kas-footer { display:flex; justify-content:space-between; align-items:center; gap:12px; padding-top:12px; }
+.pager button { padding:6px 8px; border-radius:8px; border:1px solid #e6eef8; background:#fff; cursor:pointer; }
+
+/* form */
+.kas-form { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+.kas-form .label { margin-bottom:6px; color:#475569; font-size:13px; }
+.kas-form .input { padding:10px 12px; border:1px solid #e6e9ef; border-radius:8px; font-size:14px; }
