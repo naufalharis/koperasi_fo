@@ -13,8 +13,14 @@ import AnggotaEdit from "./components/AnggotaEdit";
 import KasList from "./components/KasList";
 import KasForm from "./components/KasForm";
 
-import AngsuranList from "./components/AngsuranList";
-import AngsuranForm from "./components/AngsuranForm";
+import SimpananList from "./components/SimpananList";
+import TabunganList from "./components/TabunganList";
+
+import JabatanList from "./components/JabatanList";
+import JabatanForm from "./components/JabatanForm";
+
+
+import Layout from "./components/Layout/Layout";
 
 // Wrapper component untuk AngsuranForm
 function AngsuranFormWrapper() {
@@ -54,12 +60,17 @@ function App() {
           <Route path="/kas/create" element={<KasForm />} />
           <Route path="/kas/:id/edit" element={<KasForm />} />
 
+          {/* Simpanan */}
+          <Route path="/simpanan" element={<SimpananList />} />
 
+          {/* Tabungan */}
+          <Route path="/tabungan" element={<TabunganList />} />
 
-        {/* Angsuran */}
-        <Route path="/angsuran" element={<AngsuranList />} />
-        <Route path="/angsuran/form" element={<AngsuranFormWrapper />} />
-        <Route path="/angsuran/form/:id" element={<AngsuranFormWrapper />} />
+          {/* Jabatan */}
+          <Route path="/jabatan" element={<JabatanList />} />
+          <Route path="/jabatan/create" element={<JabatanForm />} />
+          <Route path="/jabatan/:id/edit" element={<JabatanForm />} />
+
 
         </Routes>
       </Layout>
@@ -67,4 +78,4 @@ function App() {
   );
 }
 
-export default App;
+export default App;
