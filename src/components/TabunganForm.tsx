@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../api/axios";
 import { tabunganService } from "../services/tabunganService";
+import "./Tabungan.css";
 
 interface Props {
   editing: any;
@@ -19,41 +20,48 @@ const TabunganForm: React.FC<Props> = ({ editing, onSuccess, onCancel }) => {
     jumlah: "",
     note: "",
   });
+  const [saving, setSaving] = useState(false);
 
-  // Load dropdown
+  // Load dropdowns
   useEffect(() => {
-    api.get("/auth/anggota").then((res) => setAnggotaList(res.data));
-    api.get("/kategori-simpanan").then((res) => setKategoriList(res.data));
+    api.get("/auth/anggota").then((res) => setAnggotaList(res.data || []));
+    api.get("/kategori-simpanan").then((res) => setKategoriList(res.data || []));
   }, []);
 
   // Auto-set form saat edit atau tambah
   useEffect(() => {
     if (editing && editing.id) {
       setForm({
-        id_anggota: editing.id_anggota,
-        id_kategori_simpanan: editing.id_kategori_simpanan,
+        id_anggota: editing.id_anggota ?? "",
+        id_kategori_simpanan: editing.id_kategori_simpanan ?? "",
         tanggal: editing.tanggal?.substring(0, 10) || "",
-        jumlah: editing.jumlah,
-        note: editing.note || "",
+        jumlah: editing.jumlah ?? "",
+        note: editing.note ?? "",
       });
     } else {
       setForm({
         id_anggota: "",
         id_kategori_simpanan: "",
-        tanggal: "",
+        tanggal: new Date().toISOString().slice(0, 10),
         jumlah: "",
         note: "",
       });
     }
   }, [editing]);
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // basic validation
+    if (!form.id_anggota || !form.id_kategori_simpanan || !form.tanggal || !form.jumlah) {
+      alert("Lengkapi semua field wajib");
+      return;
+    }
 
+    setSaving(true);
     const payload = {
       ...form,
       jumlah: Number(form.jumlah),
@@ -70,74 +78,56 @@ const TabunganForm: React.FC<Props> = ({ editing, onSuccess, onCancel }) => {
     } catch (err) {
       console.error(err);
       alert("Gagal menyimpan tabungan");
+    } finally {
+      setSaving(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="box" style={{ marginTop: 20 }}>
-      <h3>{editing?.id ? "Edit Tabungan" : "Tambah Tabungan"}</h3>
+    <div className="tg-form-card">
+      <form onSubmit={handleSubmit}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+          <h4 style={{ margin: 0 }}>{editing?.id ? "Edit Tabungan" : "Tambah Tabungan"}</h4>
+          <div style={{ display: "flex", gap: 8 }}>
+            <button type="button" className="btn btn-ghost" onClick={onCancel}>Batal</button>
+            <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? "Menyimpan..." : "Simpan"}</button>
+          </div>
+        </div>
 
-      <label>Anggota</label>
-      <select
-        name="id_anggota"
-        value={form.id_anggota}
-        onChange={handleChange}
-        required
-      >
-        <option value="">-- pilih anggota --</option>
-        {anggotaList.map((a) => (
-          <option key={a.id} value={a.id}>
-            {a.nama}
-          </option>
-        ))}
-      </select>
+        <div className="tg-form-grid">
+          <div className="tg-field">
+            <label>Anggota</label>
+            <select name="id_anggota" value={form.id_anggota} onChange={handleChange} required>
+              <option value="">-- pilih anggota --</option>
+              {anggotaList.map((a) => (<option key={a.id} value={a.id}>{a.nama}</option>))}
+            </select>
+          </div>
 
-      <label>Kategori Simpanan</label>
-      <select
-        name="id_kategori_simpanan"
-        value={form.id_kategori_simpanan}
-        onChange={handleChange}
-        required
-      >
-        <option value="">-- pilih kategori --</option>
-        {kategoriList.map((k) => (
-          <option key={k.id} value={k.id}>
-            {k.nama}
-          </option>
-        ))}
-      </select>
+          <div className="tg-field">
+            <label>Kategori Simpanan</label>
+            <select name="id_kategori_simpanan" value={form.id_kategori_simpanan} onChange={handleChange} required>
+              <option value="">-- pilih kategori --</option>
+              {kategoriList.map((k) => (<option key={k.id} value={k.id}>{k.nama}</option>))}
+            </select>
+          </div>
 
-      <label>Tanggal</label>
-      <input
-        type="date"
-        name="tanggal"
-        value={form.tanggal}
-        onChange={handleChange}
-        required
-      />
+          <div className="tg-field">
+            <label>Tanggal</label>
+            <input type="date" name="tanggal" value={form.tanggal} onChange={handleChange} required />
+          </div>
 
-      <label>Jumlah</label>
-      <input
-        type="number"
-        name="jumlah"
-        value={form.jumlah}
-        onChange={handleChange}
-        required
-      />
+          <div className="tg-field">
+            <label>Jumlah</label>
+            <input type="number" name="jumlah" value={form.jumlah} onChange={handleChange} required />
+          </div>
 
-      <br />
-      <button type="submit" style={{ marginTop: 10 }}>
-        {editing?.id ? "Update" : "Simpan"}
-      </button>
-
-      <button
-        type="button"
-        onClick={onCancel}
-        style={{ marginLeft: 10 }}
-      >
-        Batal
-      </button>
-    </form>
+          <div className="tg-field" style={{ gridColumn: "1 / -1" }}>
+            <label>Keterangan (optional)</label>
+            <textarea name="note" value={form.note} onChange={handleChange} rows={3} />
+          </div>
+        </div>
+      </form>
+    </div>
   );
 };
 

@@ -1,3 +1,4 @@
+// src/services/simpananService.ts
 import axios from "axios";
 
 const api = axios.create({
@@ -28,11 +29,13 @@ export interface Simpanan {
   id: string;
   nama: string;
   deleted_at?: string | null;
+  // tambahkan field lain jika perlu
 }
 
 export const simpananService = {
-  getAll: async (): Promise<Simpanan[]> => {
-    const res = await api.get("/kategori-simpanan");
+  // support includeDeleted flag -> akan meneruskan ?includeDeleted=true ke backend
+  getAll: async (includeDeleted = false): Promise<Simpanan[]> => {
+    const res = await api.get("/kategori-simpanan", { params: { includeDeleted } });
     return res.data;
   },
 
@@ -51,13 +54,21 @@ export const simpananService = {
     return res.data;
   },
 
-  softDelete: async (id: string, deleted_by: string): Promise<Simpanan> => {
-    const res = await api.delete(`/kategori-simpanan/${id}`, { data: { deleted_by } });
+  // soft-delete via PATCH (recommended)
+  softDelete: async (id: string, deleted_by?: string): Promise<Simpanan> => {
+    const res = await api.patch(`/kategori-simpanan/${id}/soft-delete`, { deleted_by });
     return res.data;
   },
 
-  forceDelete: async (id: string): Promise<Simpanan> => {
-    const res = await api.delete(`/kategori-simpanan/force/${id}`);
+  // restore (undo soft-delete)
+  restore: async (id: string): Promise<Simpanan> => {
+    const res = await api.patch(`/kategori-simpanan/${id}/restore`);
+    return res.data;
+  },
+
+  // hard delete — gunakan route backend-mu; /kategori-simpanan/:id is typical
+  forceDelete: async (id: string): Promise<any> => {
+    const res = await api.delete(`/kategori-simpanan/${id}`);
     return res.data;
   },
 };
