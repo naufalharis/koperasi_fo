@@ -13,6 +13,9 @@ import KasForm from "./components/KasForm";
 import AngsuranList from "./components/AngsuranList";
 import AngsuranForm from "./components/AngsuranForm";
 
+import JabatanList from "./components/JabatanList";
+import JabatanForm from "./components/JabatanForm";
+
 // Wrapper component untuk AngsuranForm
 function AngsuranFormWrapper() {
   const navigate = useNavigate();
@@ -44,7 +47,10 @@ function App() {
         <Route path="/kas/create" element={<KasForm />} />
         <Route path="/kas/:id/edit" element={<KasForm />} />
 
-
+        {/* jabatan */}
+        <Route path="/jabatan" element={<JabatanList />} />
+        <Route path="/jabatan/create" element={<JabatanForm />} />
+        <Route path="/jabatan/:id/edit" element={<JabatanForm />} />
 
         {/* Angsuran */}
         <Route path="/angsuran" element={<AngsuranList />} />
