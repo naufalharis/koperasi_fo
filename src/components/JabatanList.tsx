@@ -24,36 +24,43 @@ export default function JabatanList() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
+  const [showDeleted, setShowDeleted] = useState(false); // false = active, true = trash
 
-  async function fetchJabatan() {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await api.get("/jabatan");
-      // support both { data } or plain array
-      const payload = res.data?.data ?? res.data;
-      setItems(Array.isArray(payload) ? payload : []);
-    } catch (err: any) {
-      console.error("Gagal ambil jabatan:", err);
-      setError(err?.response?.data?.message || "Gagal mengambil daftar jabatan");
-    } finally {
-      setLoading(false);
-    }
+  async function fetchJabatan(includeDeleted = false) {
+  setLoading(true);
+  setError(null);
+  try {
+    const res = await api.get("/jabatan", { params: { includeDeleted } });
+    const payload = res.data?.data ?? res.data;
+    setItems(Array.isArray(payload) ? payload : []);
+  } catch (err: any) {
+    console.error("Gagal ambil jabatan:", err);
+    setError(err?.response?.data?.message || "Gagal mengambil daftar jabatan");
+  } finally {
+    setLoading(false);
   }
+}
 
-  useEffect(() => {
-    fetchJabatan();
-  }, []);
+// panggil:
+useEffect(() => {
+  fetchJabatan(showDeleted);
+}, [showDeleted]);
+
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return items;
-    return items.filter((j) => j.nama.toLowerCase().includes(q));
+    const list = items.filter((j) => (q ? j.nama.toLowerCase().includes(q) : true));
+    return list;
   }, [items, search]);
 
-  const total = filtered.length;
+  // split active / deleted
+  const activeItems = filtered.filter((j) => !j.deleted_at);
+  const deletedItems = filtered.filter((j) => !!j.deleted_at);
+
+  const total = (showDeleted ? deletedItems.length : activeItems.length);
   const lastPage = Math.max(1, Math.ceil(total / perPage));
-  const pageData = filtered.slice((page - 1) * perPage, page * perPage);
+  const source = showDeleted ? deletedItems : activeItems;
+  const pageData = source.slice((page - 1) * perPage, page * perPage);
 
   const fmtDate = (s?: string | null) => {
     if (!s) return "-";
@@ -68,8 +75,9 @@ export default function JabatanList() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    const ok = window.confirm("Hapus jabatan ini? Aksi ini akan melakukan soft-delete.");
+  // actions
+  const handleSoftDelete = async (id: string) => {
+    const ok = window.confirm("Yakin ingin menghapus (soft) jabatan ini?");
     if (!ok) return;
     try {
       await api.patch(`/jabatan/${id}/soft-delete`);
@@ -84,7 +92,7 @@ export default function JabatanList() {
     const ok = window.confirm("Restore jabatan ini?");
     if (!ok) return;
     try {
-      await api.post(`/jabatan/${id}/restore`);
+      await api.patch(`/jabatan/${id}/restore`);
       await fetchJabatan();
     } catch (err: any) {
       console.error(err);
@@ -92,12 +100,44 @@ export default function JabatanList() {
     }
   };
 
+  const handleHardDelete = async (id: string) => {
+    const ok = window.confirm("Hapus permanen jabatan ini? Aksi ini tidak dapat dikembalikan.");
+    if (!ok) return;
+    try {
+      await api.delete(`/jabatan/${id}`);
+      await fetchJabatan();
+    } catch (err: any) {
+      console.error(err);
+      alert(err?.response?.data?.message || "Gagal menghapus permanen jabatan");
+    }
+  };
+
+  // counts for tabs
+  const activeCount = activeItems.length;
+  const deletedCount = deletedItems.length;
+
   return (
     <div className="jb-root">
       <div className="jb-card">
         <div className="jb-header">
           <h3>Manajemen Jabatan</h3>
+
           <div className="jb-actions">
+            <div className="jb-tabs" role="tablist" aria-label="Tabs">
+              <button
+                className={`jb-tab ${!showDeleted ? "active" : ""}`}
+                onClick={() => { setShowDeleted(false); setPage(1); }}
+              >
+                Semua <span className="tab-count">{activeCount}</span>
+              </button>
+              <button
+                className={`jb-tab ${showDeleted ? "active" : ""}`}
+                onClick={() => { setShowDeleted(true); setPage(1); }}
+              >
+                Tong Sampah <span className="tab-count">{deletedCount}</span>
+              </button>
+            </div>
+
             <input
               className="jb-search"
               placeholder="Cari jabatan..."
@@ -109,7 +149,8 @@ export default function JabatanList() {
               <option value={10}>10 / halaman</option>
               <option value={25}>25 / halaman</option>
             </select>
-            <button className="btn btn-primary" onClick={() => navigate("/jabatan/create")}>+ Jabatan</button>
+            {/* show create only when viewing active */}
+            {!showDeleted && <button className="btn btn-primary" onClick={() => navigate("/jabatan/create")}>+ Jabatan</button>}
           </div>
         </div>
 
@@ -129,7 +170,7 @@ export default function JabatanList() {
 
               <div className="jb-body">
                 {pageData.length === 0 ? (
-                  <div className="jb-empty">Tidak ada jabatan.</div>
+                  <div className="jb-empty">Tidak ada data.</div>
                 ) : (
                   pageData.map((j) => (
                     <div key={j.id} className={`jb-row ${j.deleted_at ? "muted" : ""}`}>
@@ -138,13 +179,19 @@ export default function JabatanList() {
                       <div className="col status">
                         {j.deleted_at ? <span className="badge badge-deleted">Dihapus</span> : <span className="badge badge-active">Aktif</span>}
                       </div>
+
                       <div className="col actions">
-                        <button className="btn" onClick={() => navigate(`/jabatan/${j.id}`)}>Lihat</button>
-                        <button className="btn" onClick={() => navigate(`/jabatan/${j.id}/edit`)}>Edit</button>
-                        {j.deleted_at ? (
-                          <button className="btn small" onClick={() => handleRestore(j.id)}>Restore</button>
+                        {!showDeleted ? (
+                          <>
+                            <button className="btn" onClick={() => navigate(`/jabatan/${j.id}`)}>Lihat</button>
+                            <button className="btn" onClick={() => navigate(`/jabatan/${j.id}/edit`)}>Edit</button>
+                            <button className="btn danger" onClick={() => handleSoftDelete(j.id)}>Hapus</button>
+                          </>
                         ) : (
-                          <button className="btn danger" onClick={() => handleDelete(j.id)}>Hapus</button>
+                          <>
+                            <button className="btn" onClick={() => handleRestore(j.id)}>Restore</button>
+                            <button className="btn danger" onClick={() => handleHardDelete(j.id)}>Hapus Permanen</button>
+                          </>
                         )}
                       </div>
                     </div>
