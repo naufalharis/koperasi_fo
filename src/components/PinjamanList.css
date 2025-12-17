@@ -1,61 +1,67 @@
-/* src/components/AnggotaList.css */
+/* src/components/PinjamanList.css */
 
 /* Container utama */
-.al-root {
+.pl-root {
   padding: 1rem;
   font-family: system-ui, -apple-system, sans-serif;
 }
 
 /* Kartu utama */
-.al-card {
+.pl-card {
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
-/* Header */
-.al-header {
+/* Header utama */
+.pl-header {
   padding: 1.5rem;
   background: #f8fafc;
   border-bottom: 1px solid #e2e8f0;
 }
 
-.al-header h3 {
+.pl-header h3 {
   margin: 0 0 1rem 0;
   font-size: 1.25rem;
   font-weight: 600;
   color: #1e293b;
 }
 
-/* Controls */
-.al-controls {
+/* Search dan filter controls */
+.pl-controls {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
   align-items: center;
 }
 
-.al-search input {
+.pl-search {
+  flex: 1;
+  min-width: 250px;
+  max-width: 400px;
+}
+
+.pl-search input {
+  width: 100%;
   padding: 0.5rem 1rem;
   border: 1px solid #cbd5e1;
   border-radius: 4px;
-  width: 250px;
   font-size: 0.875rem;
 }
 
-.al-search input:focus {
+.pl-search input:focus {
   outline: none;
   border-color: #3b82f6;
 }
 
-.al-selects {
+.pl-selects {
   display: flex;
   gap: 0.5rem;
   align-items: center;
 }
 
-.al-selects select {
+.pl-selects select {
   padding: 0.5rem;
   border: 1px solid #cbd5e1;
   border-radius: 4px;
@@ -63,7 +69,7 @@
   background: white;
 }
 
-.al-sort-btn {
+.pl-sort-btn {
   padding: 0.5rem;
   border: 1px solid #cbd5e1;
   border-radius: 4px;
@@ -72,14 +78,82 @@
   font-size: 0.875rem;
 }
 
-/* Table */
-.al-table {
+/* Action controls */
+.pl-actions {
+  padding: 1rem 1.5rem;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.pl-action-buttons {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+/* Buttons - Konsisten dengan AnggotaList */
+.btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn:hover {
+  background: #f8fafc;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+}
+
+.btn-secondary {
+  border-color: #cbd5e1;
+  color: #64748b;
+}
+
+.btn-secondary:hover {
+  background: #f1f5f9;
+}
+
+.btn-danger {
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+.btn-danger:hover {
+  background: #fee2e2;
+}
+
+.btn-small {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  min-height: 32px;
+}
+
+/* Table - Persis dengan AnggotaList */
+.pl-table {
   overflow-x: auto;
 }
 
-.al-table-head {
+.pl-table-head {
   display: grid;
-  grid-template-columns: 1.5fr 1.5fr 1fr 1fr 0.8fr 1.2fr;
+  grid-template-columns: 1.5fr 0.8fr 0.8fr 0.8fr 0.8fr 1fr;
   padding: 1rem 1.5rem;
   background: #f1f5f9;
   font-weight: 600;
@@ -90,20 +164,20 @@
   min-width: 900px;
 }
 
-.al-table-body {
+.pl-table-body {
   min-width: 900px;
 }
 
-.al-row {
+.pl-row {
   display: grid;
-  grid-template-columns: 1.5fr 1.5fr 1fr 1fr 0.8fr 1.2fr;
+  grid-template-columns: 1.5fr 0.8fr 0.8fr 0.8fr 0.8fr 1fr;
   padding: 1rem 1.5rem;
   border-bottom: 1px solid #f1f5f9;
   align-items: center;
   font-size: 0.875rem;
 }
 
-.al-row:hover {
+.pl-row:hover {
   background: #f8fafc;
 }
 
@@ -111,23 +185,22 @@
   padding: 0 0.25rem;
 }
 
-.col.name {
+.col:first-child {
   font-weight: 500;
   color: #1e293b;
 }
 
-.col.email {
+.col:not(:first-child) {
   color: #475569;
-  word-break: break-all;
 }
 
-.col.created,
-.col.updated {
-  color: #64748b;
-  font-size: 0.8125rem;
+/* Row Actions */
+.pl-row-actions {
+  display: flex;
+  gap: 0.5rem;
 }
 
-/* Status badges */
+/* Badges - Konsisten */
 .badge {
   padding: 0.25rem 0.75rem;
   border-radius: 9999px;
@@ -136,53 +209,29 @@
   display: inline-block;
 }
 
-.badge-active {
+.badge-lunas {
   background: #dcfce7;
   color: #166534;
 }
 
-.badge-deleted {
+.badge-belum {
+  background: #fed7d7;
+  color: #991b1b;
+}
+
+.badge-soft-delete {
   background: #fee2e2;
   color: #991b1b;
 }
 
-/* Action buttons */
-.col.actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.btn {
-  padding: 0.375rem 0.75rem;
-  border: 1px solid #cbd5e1;
-  border-radius: 4px;
-  background: white;
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn:hover {
-  background: #f8fafc;
-}
-
-.btn.danger {
-  border-color: #fca5a5;
-  color: #dc2626;
-}
-
-.btn.danger:hover {
-  background: #fee2e2;
-}
-
 /* Loading skeleton */
-.al-loading {
+.pl-loading {
   padding: 2rem;
 }
 
-.al-row-skel {
+.pl-row-skel {
   display: grid;
-  grid-template-columns: 1.5fr 1.5fr 1fr 1fr 0.8fr 1.2fr;
+  grid-template-columns: 1.5fr 0.8fr 0.8fr 0.8fr 0.8fr 1fr;
   padding: 1rem 1.5rem;
   border-bottom: 1px solid #f1f5f9;
   gap: 1rem;
@@ -202,19 +251,14 @@
 }
 
 .skel-1 { width: 70%; }
-.skel-2 { width: 80%; }
+.skel-2 { width: 50%; }
 .skel-3 { width: 60%; }
 .skel-4 { width: 40%; }
+.skel-5 { width: 50%; }
+.skel-6 { width: 60%; }
 
-/* Error state */
-.al-error {
-  padding: 2rem;
-  text-align: center;
-  color: #dc2626;
-  background: #fef2f2;
-}
-
-.al-empty {
+/* Empty state */
+.pl-empty {
   grid-column: 1 / -1;
   text-align: center;
   padding: 3rem;
@@ -223,7 +267,7 @@
 }
 
 /* Footer & pagination */
-.al-footer {
+.pl-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -233,16 +277,16 @@
   font-size: 0.875rem;
 }
 
-.al-meta {
+.pl-meta {
   color: #64748b;
 }
 
-.al-pager {
+.pl-pager {
   display: flex;
   gap: 0.25rem;
 }
 
-.al-pager button {
+.pl-pager button {
   padding: 0.375rem 0.75rem;
   border: 1px solid #cbd5e1;
   background: white;
@@ -252,16 +296,16 @@
   min-width: 36px;
 }
 
-.al-pager button:hover:not(:disabled) {
+.pl-pager button:hover:not(:disabled) {
   background: #f1f5f9;
 }
 
-.al-pager button:disabled {
+.pl-pager button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.al-pager .page-info {
+.pl-pager .page-info {
   padding: 0 0.75rem;
   color: #475569;
   display: flex;
@@ -270,24 +314,35 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .al-root {
+  .pl-root {
     padding: 0.5rem;
   }
   
-  .al-header {
+  .pl-header {
     padding: 1rem;
   }
   
-  .al-controls {
+  .pl-controls {
     flex-direction: column;
     align-items: stretch;
   }
   
-  .al-search input {
+  .pl-search {
+    max-width: 100%;
+  }
+  
+  .pl-actions {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+  }
+  
+  .pl-action-buttons {
+    justify-content: center;
     width: 100%;
   }
   
-  .al-footer {
+  .pl-footer {
     flex-direction: column;
     gap: 1rem;
     text-align: center;
@@ -295,25 +350,52 @@
 }
 
 @media (max-width: 640px) {
-  .al-header h3 {
+  .pl-header h3 {
     font-size: 1.125rem;
   }
   
-  .al-table-head,
-  .al-row,
-  .al-row-skel {
+  .pl-table-head,
+  .pl-row,
+  .pl-row-skel {
     grid-template-columns: 1fr 1fr;
   }
   
-  .al-table-head .col:not(.name):not(.email),
-  .al-row .col:not(.name):not(.email),
-  .al-row-skel .skel:not(:first-child):not(:nth-child(2)) {
+  .pl-table-head .col:nth-child(3),
+  .pl-table-head .col:nth-child(4),
+  .pl-table-head .col:nth-child(5),
+  .pl-row .col:nth-child(3),
+  .pl-row .col:nth-child(4),
+  .pl-row .col:nth-child(5),
+  .pl-row-skel .skel:nth-child(3),
+  .pl-row-skel .skel:nth-child(4),
+  .pl-row-skel .skel:nth-child(5) {
     display: none;
   }
   
-  .col.actions {
+  .pl-row-actions {
     grid-column: 1 / -1;
     justify-content: center;
     margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pl-action-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .pl-action-buttons .btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .pl-row-actions {
+    flex-direction: column;
+  }
+  
+  .pl-row-actions .btn-small {
+    width: 100%;
+    text-align: center;
   }
 }

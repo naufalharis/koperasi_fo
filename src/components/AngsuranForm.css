@@ -1,0 +1,280 @@
+/* src/components/AngsuranForm.css */
+
+/* Container */
+.af-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Card */
+.af-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+/* Header */
+.af-header {
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.af-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.af-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #64748b;
+  cursor: pointer;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+  line-height: 1;
+}
+
+.af-close-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.af-close-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Error Global */
+.af-error-global {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 0.75rem 1rem;
+  margin: 1rem 1.5rem 0;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  border-left: 4px solid #dc2626;
+}
+
+/* Form */
+.af-form {
+  padding: 1.5rem;
+}
+
+.af-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Form Groups */
+.af-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.af-label {
+  margin-bottom: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #475569;
+}
+
+.af-required {
+  color: #dc2626;
+}
+
+/* Inputs */
+.af-input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  transition: all 0.2s;
+  background: white;
+}
+
+.af-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.af-input:disabled {
+  background: #f8fafc;
+  cursor: not-allowed;
+}
+
+.af-input-error {
+  border-color: #dc2626;
+}
+
+.af-input-error:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+/* Amount Input */
+.af-amount-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.af-currency-prefix {
+  position: absolute;
+  left: 0.75rem;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.af-amount-input .af-input {
+  padding-left: 2.5rem;
+  width: 100%;
+}
+
+.af-amount-preview {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #16a34a;
+  font-weight: 500;
+}
+
+/* Error Messages */
+.af-error-message {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #dc2626;
+}
+
+.af-info-message {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #64748b;
+  font-style: italic;
+}
+
+/* Actions */
+.af-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Buttons */
+.af-btn {
+  padding: 0.5rem 1.5rem;
+  border: 1px solid;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 40px;
+}
+
+.af-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.af-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.af-btn-primary {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+}
+
+.af-btn-primary:hover:not(:disabled) {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.af-btn-secondary {
+  background: white;
+  border-color: #cbd5e1;
+  color: #64748b;
+}
+
+.af-btn-secondary:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+/* Spinner */
+.af-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: af-spin 0.8s linear infinite;
+}
+
+@keyframes af-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .af-container {
+    margin: 1rem;
+  }
+  
+  .af-header {
+    padding: 1rem;
+  }
+  
+  .af-form {
+    padding: 1rem;
+  }
+  
+  .af-form-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .af-actions {
+    flex-direction: column;
+  }
+  
+  .af-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .af-title {
+    font-size: 1.125rem;
+  }
+  
+  .af-amount-input .af-input {
+    padding-left: 2rem;
+  }
+  
+  .af-currency-prefix {
+    left: 0.5rem;
+  }
+}

@@ -1,0 +1,282 @@
+/* src/components/PinjamanForm.css */
+
+/* Modal overlay */
+.pf-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+/* Modal container */
+.pf-modal {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Header */
+.pf-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+}
+
+.pf-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.pf-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #64748b;
+  cursor: pointer;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.pf-close-btn:hover {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.pf-close-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Global error */
+.pf-error-global {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 0.75rem 1rem;
+  margin: 1rem 1.5rem 0;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  border-left: 4px solid #dc2626;
+}
+
+/* Form */
+.pf-form {
+  padding: 1.5rem;
+}
+
+.pf-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Form groups */
+.pf-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.pf-label {
+  margin-bottom: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #475569;
+}
+
+.pf-required {
+  color: #dc2626;
+}
+
+/* Inputs */
+.pf-input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  transition: all 0.2s;
+  background: white;
+}
+
+.pf-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.pf-input:disabled {
+  background: #f8fafc;
+  cursor: not-allowed;
+}
+
+.pf-input-error {
+  border-color: #dc2626;
+}
+
+.pf-input-error:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+/* Amount input */
+.pf-amount-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.pf-currency-prefix {
+  position: absolute;
+  left: 0.75rem;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.pf-amount-input .pf-input {
+  padding-left: 2.5rem;
+  width: 100%;
+}
+
+.pf-amount-preview {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #16a34a;
+  font-weight: 500;
+}
+
+/* Error messages */
+.pf-error-message {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #dc2626;
+}
+
+/* Actions */
+.pf-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Buttons */
+.pf-btn {
+  padding: 0.5rem 1.5rem;
+  border: 1px solid;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 40px;
+}
+
+.pf-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.pf-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pf-btn-primary {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+}
+
+.pf-btn-primary:hover:not(:disabled) {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.pf-btn-secondary {
+  background: white;
+  border-color: #cbd5e1;
+  color: #64748b;
+}
+
+.pf-btn-secondary:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+/* Spinner */
+.pf-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: pf-spin 0.8s linear infinite;
+}
+
+@keyframes pf-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pf-modal {
+    max-height: 95vh;
+  }
+  
+  .pf-header {
+    padding: 1rem;
+  }
+  
+  .pf-form {
+    padding: 1rem;
+  }
+  
+  .pf-form-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .pf-actions {
+    flex-direction: column;
+  }
+  
+  .pf-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .pf-title {
+    font-size: 1.125rem;
+  }
+  
+  .pf-amount-input .pf-input {
+    padding-left: 2rem;
+  }
+  
+  .pf-currency-prefix {
+    left: 0.5rem;
+  }
+}
