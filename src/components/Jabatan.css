@@ -41,3 +41,26 @@
 .btn-primary { background: linear-gradient(90deg,#06b6d4,#3b82f6); color:#fff; border:none; box-shadow: 0 8px 20px rgba(59,130,246,0.12); }
 .btn-muted { background:transparent; color:#374151; border:1px solid #e6eef8; }
 .btn.danger { background:#fff7f8; color:#9f1239; border-color: rgba(159,18,57,0.08); }
+
+/* Tabs */
+.jb-tabs { display:flex; gap:8px; align-items:center; margin-right:8px; }
+.jb-tab { background: transparent; border: 1px solid transparent; padding:8px 10px; border-radius:8px; cursor:pointer; font-weight:600; color:#475569; display:flex; gap:8px; align-items:center; }
+.jb-tab.active { background: #eef2ff; color:#0f172a; border-color: rgba(59,130,246,0.12); box-shadow: 0 6px 18px rgba(59,130,246,0.06); }
+.tab-count { background:#fff; padding:2px 8px; border-radius:999px; font-weight:700; font-size:12px; color:#475569; border:1px solid rgba(2,6,23,0.04); }
+
+/* small tweaks for action buttons in table */
+.jb-row .btn { margin-right:6px; padding:6px 10px; font-size:13px; }
+.jb-row .btn:last-child { margin-right:0; }
+
+/* danger (red) */
+.btn.danger { background:#fff7f8; color:#9f1239; border:1px solid rgba(159,18,57,0.06); }
+
+/* restore (use neutral style) */
+.btn[role="restore"] { background: #ecfdf5; color: #065f46; border: 1px solid rgba(6,95,70,0.06); }
+
+/* ensure responsive */
+@media (max-width:880px) {
+  .jb-head, .jb-row { grid-template-columns: 1fr auto; grid-auto-rows: auto; }
+  .col.actions { justify-self: end; }
+}
+
