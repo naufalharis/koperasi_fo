@@ -16,6 +16,10 @@ import KasForm from "./components/KasForm";
 import SimpananList from "./components/SimpananList";
 import TabunganList from "./components/TabunganList";
 
+import JabatanList from "./components/JabatanList";
+import JabatanForm from "./components/JabatanForm";
+
+
 import Layout from "./components/Layout/Layout";
 
 // Wrapper component untuk AngsuranForm
@@ -44,6 +48,7 @@ function App() {
           <Route path="/anggota" element={<AnggotaList />} />
           <Route path="/anggota/:id/edit" element={<AnggotaEdit />} />
           <Route path="/pinjaman" element={<PinjamanList />} />
+          
 
           {/* Angsuran */}
           <Route path="/angsuran" element={<AngsuranList />} />
@@ -60,6 +65,12 @@ function App() {
 
           {/* Tabungan */}
           <Route path="/tabungan" element={<TabunganList />} />
+
+          {/* Jabatan */}
+          <Route path="/jabatan" element={<JabatanList />} />
+          <Route path="/jabatan/create" element={<JabatanForm />} />
+          <Route path="/jabatan/:id/edit" element={<JabatanForm />} />
+
 
         </Routes>
       </Layout>

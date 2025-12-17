@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { pinjamanService } from "../services/pinjamanService";
+import "./PinjamanForm.css";
 
 export default function PinjamanForm({ onClose, onSuccess, edit }: any) {
   const [form, setForm] = useState({
