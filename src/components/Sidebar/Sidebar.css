@@ -52,3 +52,24 @@
   color: white;
   border-left: 4px solid #4f46e5;
 }
+
+.menu-parent {
+  cursor: pointer;
+  padding: 10px 15px;
+  color: #fff;
+}
+
+.menu-parent:hover {
+  background-color: #2f3542;
+}
+
+.submenu {
+  list-style: none;
+  padding-left: 20px;
+}
+
+.submenu li a {
+  display: block;
+  padding: 8px 15px;
+  font-size: 14px;
+}

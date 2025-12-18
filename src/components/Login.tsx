@@ -35,7 +35,7 @@ export default function LoginPage() {
       const token = res.data.access_token || res.data.token || res.data.accessToken;
       if (!token) throw new Error("Token tidak ditemukan.");
 
-      localStorage.setItem("token", token);
+      localStorage.setItem("access_token", token);
       if (remember) localStorage.setItem("rememberedEmail", email);
       else localStorage.removeItem("rememberedEmail");
 
