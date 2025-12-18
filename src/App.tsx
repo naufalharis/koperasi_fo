@@ -1,9 +1,4 @@
-import {
-  Routes,
-  Route,
-  Navigate,
-  useNavigate,
-} from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 
 import LoginPage from "./components/Login";
 import RegisterPage from "./components/Register";
@@ -30,54 +25,59 @@ import JabatanForm from "./components/JabatanForm";
 import Layout from "./components/Layout/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-// Wrapper Angsuran Form
+/* =====================
+   Wrapper Angsuran Form
+===================== */
 function AngsuranFormWrapper() {
   const navigate = useNavigate();
-
   return <AngsuranForm onSuccess={() => navigate("/angsuran")} />;
 }
 
 function App() {
   return (
-      <Routes>
+    <Routes>
+      {/* PUBLIC */}
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
 
-        {/* PUBLIC */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+      {/* PROTECTED */}
+      <Route element={<ProtectedRoute />}>
+        <Route element={<Layout />}>
+          {/* DEFAULT DASHBOARD */}
+          <Route index element={<Dashboard />} />
+          <Route path="dashboard" element={<Dashboard />} />
 
-        {/* PROTECTED (TOKEN WAJIB) */}
-        <Route element={<ProtectedRoute />}>
-          <Route element={<Layout />}>
+          {/* ANGGOTA */}
+          <Route path="anggota" element={<AnggotaList />} />
+          <Route path="anggota/:id/edit" element={<AnggotaEdit />} />
 
-            <Route path="/dashboard" element={<Dashboard />} />
+          {/* PINJAMAN */}
+          <Route path="pinjaman" element={<PinjamanList />} />
 
-            <Route path="/anggota" element={<AnggotaList />} />
-            <Route path="/anggota/:id/edit" element={<AnggotaEdit />} />
+          {/* ANGSURAN */}
+          <Route path="angsuran" element={<AngsuranList />} />
+          <Route path="angsuran/tambah" element={<AngsuranFormWrapper />} />
+          <Route path="angsuran/form/:id" element={<AngsuranFormWrapper />} />
 
-            <Route path="/pinjaman" element={<PinjamanList />} />
+          {/* KAS */}
+          <Route path="kas" element={<KasList />} />
+          <Route path="kas/create" element={<KasForm />} />
+          <Route path="kas/:id/edit" element={<KasForm />} />
 
-            <Route path="/angsuran" element={<AngsuranList />} />
-            <Route path="/angsuran/tambah" element={<AngsuranFormWrapper />} />
-            <Route path="/angsuran/form/:id" element={<AngsuranFormWrapper />} />
+          {/* SIMPANAN */}
+          <Route path="simpanan" element={<SimpananList />} />
+          <Route path="tabungan" element={<TabunganList />} />
 
-            <Route path="/kas" element={<KasList />} />
-            <Route path="/kas/create" element={<KasForm />} />
-            <Route path="/kas/:id/edit" element={<KasForm />} />
-
-            <Route path="/simpanan" element={<SimpananList />} />
-            <Route path="/tabungan" element={<TabunganList />} />
-
-            <Route path="/jabatan" element={<JabatanList />} />
-            <Route path="/jabatan/create" element={<JabatanForm />} />
-            <Route path="/jabatan/:id/edit" element={<JabatanForm />} />
-
-          </Route>
+          {/* JABATAN */}
+          <Route path="jabatan" element={<JabatanList />} />
+          <Route path="jabatan/create" element={<JabatanForm />} />
+          <Route path="jabatan/:id/edit" element={<JabatanForm />} />
         </Route>
+      </Route>
 
-        {/* DEFAULT */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
-
-      </Routes>
+      {/* FALLBACK */}
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes>
   );
 }
 
