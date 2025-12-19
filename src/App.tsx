@@ -24,6 +24,7 @@ import JabatanForm from "./components/JabatanForm";
 
 import Layout from "./components/Layout/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import KategoriJangkaWaktuPage from "./components/JangkaWaktuPage";
 
 /* =====================
    Wrapper Angsuran Form
@@ -66,7 +67,12 @@ function App() {
 
           {/* SIMPANAN */}
           <Route path="simpanan" element={<SimpananList />} />
+
+          {/* TABUNGAN */}
           <Route path="tabungan" element={<TabunganList />} />
+
+          {/* Jangka Waktu */}
+          <Route path="jangkaWaktu" element={<KategoriJangkaWaktuPage />} />
 
           {/* JABATAN */}
           <Route path="jabatan" element={<JabatanList />} />
