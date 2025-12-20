@@ -3,10 +3,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../api/axios";
 import "./AnggotaEdit.css";
+import PenarikanHistory from "../components/PenarikanHistory";
 
-interface Jabatan { 
-  id: string; 
-  nama: string; 
+interface Jabatan {
+  id: string;
+  nama: string;
 }
 
 interface AnggotaPayload {
@@ -34,19 +35,20 @@ export default function AnggotaEdit() {
 
   const [jabatanList, setJabatanList] = useState<Jabatan[]>([]);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [showHistory, setShowHistory] = useState(false);
 
   useEffect(() => {
     let mounted = true;
-    
+
     async function loadData() {
       setLoading(true);
       setGlobalError(null);
-      
+
       try {
         // Fetch anggota detail dan jabatan secara parallel
         const [anggotaRes, jabatanRes] = await Promise.all([
           api.get<AnggotaPayload>(`/auth/anggota/${id}`),
-          api.get<Jabatan[]>("/jabatan").catch(() => ({ data: [] })) // Fail gracefully
+          api.get<Jabatan[]>("/jabatan").catch(() => ({ data: [] })), // Fail gracefully
         ]);
 
         if (!mounted) return;
@@ -68,34 +70,36 @@ export default function AnggotaEdit() {
 
     loadData();
 
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+    };
   }, [id]);
 
   const validate = () => {
     const errors: Record<string, string> = {};
-    
+
     if (!nama.trim()) errors.nama = "Nama wajib diisi";
     if (!email.trim()) errors.email = "Email wajib diisi";
     else if (!/^\S+@\S+\.\S+$/.test(email)) errors.email = "Email tidak valid";
-    
+
     if (noHp && !/^\+?\d{6,15}$/.test(noHp)) {
       errors.noHp = "Format no. HP tidak valid (contoh: +6281234567890)";
     }
-    
+
     return errors;
   };
 
   const handleSave = async (ev?: React.FormEvent) => {
     ev?.preventDefault();
     setGlobalError(null);
-    
+
     const errors = validate();
     setFieldErrors(errors);
-    
+
     if (Object.keys(errors).length > 0) return;
 
     setSaving(true);
-    
+
     try {
       const payload = {
         nama: nama.trim(),
@@ -106,31 +110,26 @@ export default function AnggotaEdit() {
       };
 
       await api.put(`/auth/anggota/${id}`, payload);
-      
+
       // Navigasi ke halaman daftar anggota
       navigate("/anggota");
-      
     } catch (err: any) {
       console.error("Save error:", err);
-      
+
       // Handle validation errors from server
       if (err?.response?.data?.errors) {
         const serverErrors = err.response.data.errors;
         const newErrors: Record<string, string> = {};
-        
-        Object.keys(serverErrors).forEach(key => {
-          if (key === 'no_hp') newErrors.noHp = serverErrors[key];
-          else if (key === 'id_jabatan') newErrors.jabatanId = serverErrors[key];
+
+        Object.keys(serverErrors).forEach((key) => {
+          if (key === "no_hp") newErrors.noHp = serverErrors[key];
+          else if (key === "id_jabatan") newErrors.jabatanId = serverErrors[key];
           else newErrors[key] = serverErrors[key];
         });
-        
+
         setFieldErrors(newErrors);
       } else {
-        setGlobalError(
-          err?.response?.data?.message || 
-          err?.message || 
-          "Gagal menyimpan perubahan"
-        );
+        setGlobalError(err?.response?.data?.message || err?.message || "Gagal menyimpan perubahan");
       }
     } finally {
       setSaving(false);
@@ -156,29 +155,43 @@ export default function AnggotaEdit() {
     <div className="ae-container">
       <div className="ae-header">
         <h2>Edit Anggota</h2>
-        
+
         <div className="ae-actions">
+          <button
+            type="button"
+            className="ae-btn ae-btn-ghost"
+            onClick={() => setShowHistory((s) => !s)}
+            disabled={saving}
+            title="Tampilkan riwayat penarikan anggota"
+          >
+            {showHistory ? "Tutup Riwayat" : "Riwayat Penarikan"}
+          </button>
+
           <button
             type="button"
             className="ae-btn ae-btn-secondary"
             onClick={handleCancel}
             disabled={saving}
+            style={{ marginLeft: 8 }}
           >
             Batal
           </button>
-          
+
           <button
             type="button"
             className="ae-btn ae-btn-primary"
             onClick={handleSave}
             disabled={saving}
+            style={{ marginLeft: 8 }}
           >
             {saving ? (
               <>
-                <span className="ae-spinner"></span>
+                <span className="ae-spinner" />
                 Menyimpan...
               </>
-            ) : "Simpan"}
+            ) : (
+              "Simpan"
+            )}
           </button>
         </div>
       </div>
@@ -198,17 +211,15 @@ export default function AnggotaEdit() {
             <input
               id="nama"
               type="text"
-              className={`ae-input ${fieldErrors.nama ? 'ae-input-error' : ''}`}
+              className={`ae-input ${fieldErrors.nama ? "ae-input-error" : ""}`}
               value={nama}
               onChange={(e) => {
                 setNama(e.target.value);
-                if (fieldErrors.nama) setFieldErrors(prev => ({ ...prev, nama: '' }));
+                if (fieldErrors.nama) setFieldErrors((prev) => ({ ...prev, nama: "" }));
               }}
               disabled={saving}
             />
-            {fieldErrors.nama && (
-              <div className="ae-error-message">{fieldErrors.nama}</div>
-            )}
+            {fieldErrors.nama && <div className="ae-error-message">{fieldErrors.nama}</div>}
           </div>
 
           <div className="ae-form-group">
@@ -218,17 +229,15 @@ export default function AnggotaEdit() {
             <input
               id="email"
               type="email"
-              className={`ae-input ${fieldErrors.email ? 'ae-input-error' : ''}`}
+              className={`ae-input ${fieldErrors.email ? "ae-input-error" : ""}`}
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
-                if (fieldErrors.email) setFieldErrors(prev => ({ ...prev, email: '' }));
+                if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: "" }));
               }}
               disabled={saving}
             />
-            {fieldErrors.email && (
-              <div className="ae-error-message">{fieldErrors.email}</div>
-            )}
+            {fieldErrors.email && <div className="ae-error-message">{fieldErrors.email}</div>}
           </div>
 
           <div className="ae-form-group">
@@ -238,18 +247,16 @@ export default function AnggotaEdit() {
             <input
               id="noHp"
               type="tel"
-              className={`ae-input ${fieldErrors.noHp ? 'ae-input-error' : ''}`}
+              className={`ae-input ${fieldErrors.noHp ? "ae-input-error" : ""}`}
               value={noHp}
               onChange={(e) => {
                 setNoHp(e.target.value);
-                if (fieldErrors.noHp) setFieldErrors(prev => ({ ...prev, noHp: '' }));
+                if (fieldErrors.noHp) setFieldErrors((prev) => ({ ...prev, noHp: "" }));
               }}
               disabled={saving}
               placeholder="+6281234567890"
             />
-            {fieldErrors.noHp && (
-              <div className="ae-error-message">{fieldErrors.noHp}</div>
-            )}
+            {fieldErrors.noHp && <div className="ae-error-message">{fieldErrors.noHp}</div>}
           </div>
 
           <div className="ae-form-group">
@@ -258,21 +265,19 @@ export default function AnggotaEdit() {
             </label>
             <select
               id="jabatan"
-              className={`ae-input ${fieldErrors.jabatanId ? 'ae-input-error' : ''}`}
+              className={`ae-input ${fieldErrors.jabatanId ? "ae-input-error" : ""}`}
               value={jabatanId}
               onChange={(e) => setJabatanId(e.target.value)}
               disabled={saving || jabatanList.length === 0}
             >
               <option value="">-- Pilih jabatan --</option>
-              {jabatanList.map(j => (
+              {jabatanList.map((j) => (
                 <option key={j.id} value={j.id}>
                   {j.nama}
                 </option>
               ))}
             </select>
-            {fieldErrors.jabatanId && (
-              <div className="ae-error-message">{fieldErrors.jabatanId}</div>
-            )}
+            {fieldErrors.jabatanId && <div className="ae-error-message">{fieldErrors.jabatanId}</div>}
           </div>
 
           <div className="ae-form-group ae-full-width">
@@ -290,6 +295,13 @@ export default function AnggotaEdit() {
           </div>
         </div>
       </form>
+
+      {/* Riwayat penarikan (toggle) */}
+      {showHistory && id && (
+        <div style={{ marginTop: 18 }}>
+          <PenarikanHistory anggotaId={id} pageSize={8} />
+        </div>
+      )}
     </div>
   );
 }
